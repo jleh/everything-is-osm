@@ -6,10 +6,9 @@ osm_dir: /var/osm
 extra_storage_tablespace: "extra_storage"
 extra_storage_tablespace_dir: "{{osm_dir}}/postgresql-tablespace"
 imposm3_build_dir: "{{osm_dir}}/imposm3"
-imposm3_bin: "{{imposm3_build_dir}}/imposm3"
+imposm3_bin: "{{imposm3_build_dir}}/bin/imposm3"
 imposm3_cache_dir: "{{osm_dir}}/cache"
 imposm3_packages:
-  - golang
   - git
   - libgeos++-dev
   - libleveldb-dev

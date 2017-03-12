@@ -1,20 +1,28 @@
 ---
+  - name: download go
+    get_url:
+      url: https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz
+      dest: /tmp/go1.8.src.tar.gz
+      validate_certs: no
+
+  - name: install go
+    unarchive:
+      src: /tmp/go1.8.src.tar.gz
+      dest: /usr/local
+      remote_src: True
+
   - name: install imposm3 packages
     apt: pkg={{item}}
     with_items: imposm3_packages
 
-  - name: make build dir
-    file: name={{imposm3_build_dir}} state=directory
-
-  - name: git pull imposm3 repo
-    git: repo=git://github.com/omniscale/imposm3.git dest={{imposm3_build_dir}}/src/imposm3 version={{imposm3_version}} accept_hostkey=yes
-
   - name: go get imposm3
-    command: go get imposm3 chdir={{imposm3_build_dir}}
+    command: go get github.com/omniscale/imposm3 chdir={{imposm3_build_dir}}
     environment:
       GOPATH: "{{imposm3_build_dir}}"
+      PATH: "{{ ansible_env.PATH }}:/usr/local/go/bin"
 
-  - name: go build imposm3
-    command: go build -o "{{imposm3_bin}}" imposm3 chdir={{imposm3_build_dir}}
+  - name: go install imposm3
+    command: go install github.com/omniscale/imposm3/cmd/imposm3 chdir={{imposm3_build_dir}}
     environment:
       GOPATH: "{{imposm3_build_dir}}"
+      PATH: "{{ ansible_env.PATH }}:/usr/local/go/bin"
